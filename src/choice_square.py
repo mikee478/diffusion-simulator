@@ -7,7 +7,7 @@ class ChoiceSquare:
     def __init__(self, left, top, len_px):
         self.grid_sq = GridSquare(0, 0, len_px)
         self.surface = pygame.Surface((len_px, len_px))
-        self.rect = self.surface.get_rect(left=left,top=top)
+        self.rect = self.surface.get_rect(left=left, top=top)
         self.choice = None
         self.choose_red()
 

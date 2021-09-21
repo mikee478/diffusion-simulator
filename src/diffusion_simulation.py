@@ -13,7 +13,7 @@ class DiffusionSimulation:
         pygame.init()
         self.screen_size = screen_size
         self.n_squares = n_squares
-        self.len_square = max(len_square,40)
+        self.len_square = max(len_square, 40)
 
         self.screen = pygame.display.set_mode((self.screen_size, self.screen_size))
         self.screen.fill(BLACK)
@@ -24,10 +24,10 @@ class DiffusionSimulation:
         self.controlsText = ControlsText(CONTROLS_TEXT_LEFT, CONTROLS_TEXT_TOP)
         self.screen.blit(self.controlsText.surface, self.controlsText.rect)
 
-        CHOICE_SQ_LEFT = (self.screen_size - self.len_square)//2
+        CHOICE_SQ_LEFT = (self.screen_size - self.len_square) // 2
         CHOICE_SQ_TOP = 15
-        GRID_LEFT = (self.screen_size - self.len_square * self.n_squares)//2
-        GRID_TOP = max(CHOICE_SQ_TOP * 2 + self.len_square, self.controlsText.rect.bottom)
+        GRID_LEFT = (self.screen_size - self.len_square * self.n_squares) // 2
+        GRID_TOP = max(2 * CHOICE_SQ_TOP + self.len_square, self.controlsText.rect.bottom)
 
         self.choice_sq = ChoiceSquare(CHOICE_SQ_LEFT, CHOICE_SQ_TOP, self.len_square)
         self.grid = Grid(GRID_LEFT, GRID_TOP, self.n_squares, self.len_square)
