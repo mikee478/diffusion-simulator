@@ -8,7 +8,7 @@ from controls_text import ControlsText
 from grid import Grid
 from grid_square import GridSquare
 
-class DiffusionSimulation:
+class DiffusionSimulator:
     def __init__(self, screen_size, n_squares, len_square):
         pygame.init()
         self.screen_size = screen_size
@@ -17,7 +17,7 @@ class DiffusionSimulation:
 
         self.screen = pygame.display.set_mode((self.screen_size, self.screen_size))
         self.screen.fill(BLACK)
-        pygame.display.set_caption('Diffusion Simulation')
+        pygame.display.set_caption('Diffusion Simulator')
 
         CONTROLS_TEXT_LEFT = 4
         CONTROLS_TEXT_TOP = 1
@@ -74,5 +74,5 @@ class DiffusionSimulation:
         pygame.quit()
 
 if __name__ == "__main__":
-    sim = DiffusionSimulation(screen_size=625, n_squares=10, len_square=50)
+    sim = DiffusionSimulator(screen_size=625, n_squares=10, len_square=50)
     sim.run()
