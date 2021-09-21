@@ -55,7 +55,8 @@ class GridSquare:
     def draw(self):
         self.surface.fill(BLACK)
         if not self.blocked:
-            pygame.draw.rect(self.surface, self.color, self.draw_rect)
+            scaled_color = 255 * np.power((np.asarray(self.color) / 255), 1/4)
+            pygame.draw.rect(self.surface, scaled_color, self.draw_rect)
             pygame.draw.rect(self.surface, WHITE, self.draw_rect, width=1)
             for i,c in enumerate(self.color):
                 self.surface.blit(FONT.render(str(round(c/255,2)), False, WHITE), (self.len_px//2-10,i*10+10))
@@ -74,6 +75,16 @@ class GridSquare:
         self.blocked = not self.blocked
         self.set_rgb(BLACK)
         self.draw()
+
+    # pos should be a position relative to the grid top left
+    def click(self, pos, color):
+        if self.rect.collidepoint(*pos):
+            if color != None:
+                self.add_rgb(color)
+            else:
+                self.toggle_blocked()
+
+
 
 class Grid:
     def __init__(self, left, top, len_square, n_square):
@@ -111,15 +122,31 @@ class Grid:
                     grid2[i][j].set_rgb(s)
         self.grid = grid2
 
+    # Another diffusion model to fix the loss/gain of overall chemical after rounds of diffusion.
+    # Doesn't evenly distribute chemical over time.
+    def diffuse2(self):
+        grid2 = [[GridSquare(self.len_square*j, self.len_square*i, self.len_square) for j in range(self.n_square)] for i in range(self.n_square)]
+        delta = np.array([[1,0],[-1,0],[0,1],[0,-1],[0,0]])
+        for i,row in enumerate(self.grid):
+            for j,g in enumerate(row):
+                if g.blocked:
+                    grid2[i][j].set_blocked(True)
+                else:
+                    coors = []
+                    for d in delta:
+                        coor = [i,j]+d
+                        if np.all((coor>=0) & (coor<self.n_square)) and not self.grid[coor[0]][coor[1]].blocked:
+                            coors.append(coor)
+                    c = np.asarray(self.grid[i][j].color) / len(coors)
+                    for i,j in coors:
+                        grid2[i][j].add_rgb(c)
+        self.grid = grid2
+
     def click(self, screen_pos, color):
         grid_pos = (screen_pos[0]-self.left, screen_pos[1]-self.top)
         for i,row in enumerate(self.grid):
             for j,g in enumerate(row):
-                if g.rect.collidepoint(*grid_pos):
-                    if color != None:
-                        g.add_rgb(color)
-                    else:
-                        g.toggle_blocked()
+                g.click(grid_pos, color)
 
     def clear_chemicals(self):
         for i,row in enumerate(self.grid):
