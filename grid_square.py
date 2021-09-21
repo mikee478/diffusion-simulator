@@ -8,9 +8,16 @@ class GridSquare:
         self.blocked = False
         self.len_px = len_px
         self.surface = pygame.Surface((len_px, len_px))
-        self.draw_rect = self.surface.get_rect()
+        self.rect_to_draw = self.surface.get_rect()
         self.rect = pygame.Rect(left,top,len_px,len_px)
+
         self.font = pygame.font.SysFont('Arial', 12)
+        self.TEXT_WIDTH, self.TEXT_HEIGHT = self.font.size("0.00")
+        self.VERT_TEXT_OFFSET = 12
+        self.TEXT_LEFT = (self.len_px - self.TEXT_WIDTH) // 2
+        self.TEXT_TOP = (self.len_px - 3*self.VERT_TEXT_OFFSET) // 2
+
+
         self.draw()
 
     def set_rgb(self, color2):
@@ -25,13 +32,13 @@ class GridSquare:
         self.surface.fill(BLACK)
         if not self.blocked:
             scaled_color = 255 * np.power((np.asarray(self.color) / 255), 1/4)
-            pygame.draw.rect(self.surface, scaled_color, self.draw_rect)
-            pygame.draw.rect(self.surface, WHITE, self.draw_rect, width=1)
+            pygame.draw.rect(self.surface, scaled_color, self.rect_to_draw)
+            pygame.draw.rect(self.surface, WHITE, self.rect_to_draw, width=1)
             for i,c in enumerate(self.color):
-                self.surface.blit(self.font.render(str(round(c/255,2)), False, WHITE), (self.len_px//2-10,i*10+10))
+                self.surface.blit(self.font.render('%0.2f'%round(c/255,2), False, WHITE), ((self.TEXT_LEFT, self.TEXT_TOP + i * self.VERT_TEXT_OFFSET)))
         else:
-            pygame.draw.rect(self.surface, WHITE, self.draw_rect, width=0)
-            pygame.draw.rect(self.surface, BLACK, self.draw_rect, width=1)
+            pygame.draw.rect(self.surface, WHITE, self.rect_to_draw, width=0)
+            pygame.draw.rect(self.surface, BLACK, self.rect_to_draw, width=1)
             pygame.draw.line(self.surface, BLACK, (0,0), (self.len_px,self.len_px), width=2)
             pygame.draw.line(self.surface, BLACK, (self.len_px,0), (0,self.len_px), width=2)
 

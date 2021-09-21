@@ -4,9 +4,7 @@ import numpy as np
 from color import BLACK
 
 class Grid:
-    def __init__(self, left, top, len_square, n_square):
-        self.left = left
-        self.top = top
+    def __init__(self, left, top, n_square, len_square):
         self.surface = pygame.Surface((len_square*n_square, len_square*n_square))
         self.rect = pygame.Rect(left, top, len_square*n_square, len_square*n_square)
         self.len_square = len_square
@@ -60,7 +58,7 @@ class Grid:
         self.grid = grid2
 
     def click(self, screen_pos, color):
-        grid_pos = (screen_pos[0]-self.left, screen_pos[1]-self.top)
+        grid_pos = (screen_pos[0]-self.rect.left, screen_pos[1]-self.rect.top)
         for i,row in enumerate(self.grid):
             for j,g in enumerate(row):
                 g.click(grid_pos, color)

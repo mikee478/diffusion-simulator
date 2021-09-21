@@ -3,24 +3,34 @@ from pygame.locals import K_ESCAPE, KEYDOWN, QUIT, MOUSEBUTTONUP, K_RETURN, KEYD
 import numpy as np
 
 from color import BLACK
-from config import SCREEN_SIZE, LEN_SQUARE, N_SQUARES, CONTROLS_TEXT_LEFT, CONTROLS_TEXT_TOP, CONTROLS_TEXT_STRS
 from choice_square import ChoiceSquare
 from controls_text import ControlsText
 from grid import Grid
 from grid_square import GridSquare
 
 class DiffusionSimulation:
-    def __init__(self):
+    def __init__(self, screen_size, n_squares, len_square):
         pygame.init()
-        self.screen = pygame.display.set_mode((SCREEN_SIZE, SCREEN_SIZE))
+        self.screen_size = screen_size
+        self.n_squares = n_squares
+        self.len_square = max(len_square,40)
+
+        self.screen = pygame.display.set_mode((self.screen_size, self.screen_size))
         self.screen.fill(BLACK)
         pygame.display.set_caption('Diffusion Simulation')
 
-        self.grid = Grid(50, 75, LEN_SQUARE, N_SQUARES)
-        self.choice_sq = ChoiceSquare((SCREEN_SIZE - LEN_SQUARE)//2, 12, LEN_SQUARE)
-
-        self.controlsText = ControlsText(CONTROLS_TEXT_LEFT, CONTROLS_TEXT_TOP, CONTROLS_TEXT_STRS)
+        CONTROLS_TEXT_LEFT = 4
+        CONTROLS_TEXT_TOP = 1
+        self.controlsText = ControlsText(CONTROLS_TEXT_LEFT, CONTROLS_TEXT_TOP)
         self.screen.blit(self.controlsText.surface, self.controlsText.rect)
+
+        CHOICE_SQ_LEFT = (self.screen_size - self.len_square)//2
+        CHOICE_SQ_TOP = 15
+        GRID_LEFT = (self.screen_size - self.len_square * self.n_squares)//2
+        GRID_TOP = max(CHOICE_SQ_TOP * 2 + self.len_square, self.controlsText.rect.bottom)
+
+        self.choice_sq = ChoiceSquare(CHOICE_SQ_LEFT, CHOICE_SQ_TOP, self.len_square)
+        self.grid = Grid(GRID_LEFT, GRID_TOP, self.n_squares, self.len_square)
 
         self.running = True
 
@@ -55,5 +65,5 @@ class DiffusionSimulation:
         pygame.quit() 
 
 if __name__ == "__main__":
-    sim = DiffusionSimulation()
+    sim = DiffusionSimulation(screen_size=625, n_squares=10, len_square=50)
     sim.run()
