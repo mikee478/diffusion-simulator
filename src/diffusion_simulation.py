@@ -1,5 +1,5 @@
 import pygame
-from pygame.locals import K_ESCAPE, KEYDOWN, QUIT, MOUSEBUTTONUP, K_RETURN, KEYDOWN, K_r, K_g, K_b, K_x, K_c, K_BACKSPACE
+from pygame.locals import K_ESCAPE, KEYDOWN, QUIT, MOUSEBUTTONUP, MOUSEBUTTONDOWN, K_RETURN, KEYDOWN, K_r, K_g, K_b, K_x, K_c, K_BACKSPACE
 import numpy as np
 
 from color import BLACK
@@ -32,6 +32,7 @@ class DiffusionSimulation:
         self.choice_sq = ChoiceSquare(CHOICE_SQ_LEFT, CHOICE_SQ_TOP, self.len_square)
         self.grid = Grid(GRID_LEFT, GRID_TOP, self.n_squares, self.len_square)
 
+        self.mouse_pressed = False
         self.running = True
 
     def run(self):
@@ -59,10 +60,18 @@ class DiffusionSimulation:
                         self.choice_sq.choose_blocked()  
                     elif event.key == K_BACKSPACE:
                         self.grid.clear_chemicals()    
-                elif event.type == MOUSEBUTTONUP: 
-                    self.grid.click(pygame.mouse.get_pos(), self.choice_sq.choice)
+                elif event.type == MOUSEBUTTONDOWN:
+                    if self.choice_sq.choice == None:
+                        self.grid.click(pygame.mouse.get_pos(), self.choice_sq.choice)
+                    else:
+                        self.mouse_pressed = True
+                elif event.type == MOUSEBUTTONUP:
+                    self.mouse_pressed = False
 
-        pygame.quit() 
+            if self.mouse_pressed:
+                self.grid.click(pygame.mouse.get_pos(), self.choice_sq.choice)
+
+        pygame.quit()
 
 if __name__ == "__main__":
     sim = DiffusionSimulation(screen_size=625, n_squares=10, len_square=50)
