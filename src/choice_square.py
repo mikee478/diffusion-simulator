@@ -1,6 +1,7 @@
+import pygame
+
 from color import RED, GREEN, BLUE
 from grid_square import GridSquare
-import pygame
 
 class ChoiceSquare:
     def __init__(self, left, top, len_px):

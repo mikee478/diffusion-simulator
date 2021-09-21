@@ -1,7 +1,8 @@
 import pygame
-from grid_square import GridSquare
 import numpy as np
+
 from color import BLACK
+from grid_square import GridSquare
 
 class Grid:
     def __init__(self, left, top, n_square, len_square):

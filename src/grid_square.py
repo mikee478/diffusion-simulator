@@ -1,6 +1,7 @@
 import pygame
-from color import BLACK, WHITE
 import numpy as np
+
+from color import BLACK, WHITE
 
 class GridSquare:
     def __init__(self, left, top, len_px, r=0, b=0, g=0):

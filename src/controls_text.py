@@ -1,4 +1,5 @@
 import pygame
+
 from color import WHITE
 
 class ControlsText:
