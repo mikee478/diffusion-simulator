@@ -27,12 +27,10 @@ class ChoiceSquare:
         self.draw()
 
     def draw(self):
-        self.grid_sq.blocked = self.choice == None
+        self.grid_sq.set_blocked(self.choice == None)
 
         if self.choice != None:
             self.grid_sq.set_rgb(self.choice)
-        else:
-            self.grid_sq.draw()
 
         self.surface.blit(self.grid_sq.surface, self.grid_sq.rect)
 
@@ -67,6 +65,11 @@ class GridSquare:
             pygame.draw.line(self.surface, BLACK, (0,0), (self.len_px,self.len_px), width=2)
             pygame.draw.line(self.surface, BLACK, (self.len_px,0), (0,self.len_px), width=2)
 
+    def set_blocked(self, blocked):
+        self.blocked = blocked
+        self.set_rgb(BLACK)
+        self.draw()
+
     def toggle_blocked(self):
         self.blocked = not self.blocked
         self.set_rgb(BLACK)
@@ -94,7 +97,7 @@ class Grid:
         for i,row in enumerate(self.grid):
             for j,g in enumerate(row):
                 if g.blocked:
-                    grid2[i][j].toggle_blocked()
+                    grid2[i][j].set_blocked(True)
                 else:
                     s = np.zeros(3)
                     c = 0
